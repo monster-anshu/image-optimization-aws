@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "target": "ES2022",
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "services/**/*.ts", "serverless.ts"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}
