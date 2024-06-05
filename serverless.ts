@@ -84,21 +84,52 @@ const serverlessConfiguration: AWS = {
         },
       },
 
+      CloudFrontOriginIdentity: {
+        Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+        Properties: {
+          CloudFrontOriginAccessIdentityConfig: {
+            Comment:
+              "A comment to describe the origin access identity. The comment cannot be longer than 128 characters.",
+          },
+        },
+      },
+
+      TransformedImageBucketPolicy: {
+        Type: "AWS::S3::BucketPolicy",
+        Properties: {
+          Bucket: { Ref: "TransformedImageBucket" },
+          PolicyDocument: {
+            Statement: [
+              {
+                Effect: "Allow",
+                Principal: {
+                  CanonicalUser: {
+                    "Fn::GetAtt": [
+                      "CloudFrontOriginIdentity",
+                      "S3CanonicalUserId",
+                    ],
+                  },
+                },
+                Action: "s3:GetObject",
+                Resource: { "Fn::Sub": "${TransformedImageBucket.Arn}/*" },
+              },
+            ],
+          },
+        },
+      },
+
       ImageDeliveryDistribution: {
         Type: "AWS::CloudFront::Distribution",
         Properties: {
           DistributionConfig: {
             DefaultCacheBehavior: {
               TargetOriginId: "TransformedImageOrigin",
-              ViewerProtocolPolicy: "redirect-to-https",
+              ViewerProtocolPolicy: "allow-all",
               DefaultTTL: 600,
               MaxTTL: 600,
               Compress: true,
               ForwardedValues: {
-                QueryString: false,
-                Cookies: {
-                  Forward: "none",
-                },
+                QueryString: true,
               },
             },
             Enabled: true,
@@ -113,7 +144,19 @@ const serverlessConfiguration: AWS = {
                 DomainName: {
                   "Fn::GetAtt": ["TransformedImageBucket", "DomainName"],
                 },
-                S3OriginConfig: {},
+                S3OriginConfig: {
+                  OriginAccessIdentity: {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "origin-access-identity/cloudfront/",
+                        {
+                          Ref: "CloudFrontOriginIdentity",
+                        },
+                      ],
+                    ],
+                  },
+                },
               },
             ],
           },
