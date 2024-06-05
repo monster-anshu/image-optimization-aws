@@ -56,6 +56,17 @@ const serverlessConfiguration: AWS = {
     deploymentBucket: {
       name: "${self:custom.DEPLOYMENT_BUCKET}",
     },
+    iam: {
+      role: {
+        statements: [
+          {
+            Effect: "Allow",
+            Resource: "*",
+            Action: "lambda:InvokeFunction",
+          },
+        ],
+      },
+    },
   },
   resources: {
     Resources: {
