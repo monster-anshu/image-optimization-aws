@@ -13,6 +13,7 @@ const serverlessConfiguration: AWS = {
     "serverless-offline",
     "serverless-prune-plugin",
     "serverless-s3-sync",
+    "@silvermine/serverless-plugin-cloudfront-lambda-edge",
   ],
   custom: {
     esbuild: {
