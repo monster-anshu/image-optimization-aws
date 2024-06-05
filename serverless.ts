@@ -38,6 +38,8 @@ const serverlessConfiguration: AWS = {
     ORIGINAL_IMAGE_BUCKET: "monster-anshu-image-optimization-original",
     TRANSFORMED_IMAGE_BUCKET: "monster-anshu-image-optimization-transformed",
     DEPLOYMENT_BUCKET: "monster-anshu-image-optimization-api",
+    IMAGE_PROCESSING_FUNCTION:
+      "${self:service}-${self:provider.stage}-image-processing-function",
   },
   provider: {
     name: "aws",
@@ -49,6 +51,7 @@ const serverlessConfiguration: AWS = {
     stage: "dev",
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
+      IMAGE_PROCESSING_FUNCTION: "${self:custom.IMAGE_PROCESSING_FUNCTION}",
     },
     deploymentBucket: {
       name: "${self:custom.DEPLOYMENT_BUCKET}",
@@ -98,13 +101,6 @@ const serverlessConfiguration: AWS = {
                 Id: "TransformedImageOrigin",
                 DomainName: {
                   "Fn::GetAtt": ["TransformedImageBucket", "DomainName"],
-                },
-                S3OriginConfig: {},
-              },
-              {
-                Id: "OriginalImageOrigin",
-                DomainName: {
-                  "Fn::GetAtt": ["OriginalImageBucket", "DomainName"],
                 },
                 S3OriginConfig: {},
               },
