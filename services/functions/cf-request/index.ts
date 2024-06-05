@@ -7,6 +7,7 @@ export const cfRequestHandler: AwsFunction = {
     {
       cloudFront: {
         eventType: "viewer-request",
+        origin: "s3://${self:custom.TRANSFORMED_IMAGE_BUCKET}.s3.amazonaws.com",
       },
     },
   ],

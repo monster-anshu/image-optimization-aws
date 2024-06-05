@@ -88,8 +88,7 @@ const serverlessConfiguration: AWS = {
         Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity",
         Properties: {
           CloudFrontOriginAccessIdentityConfig: {
-            Comment:
-              "A comment to describe the origin access identity. The comment cannot be longer than 128 characters.",
+            Comment: "A comment ",
           },
         },
       },

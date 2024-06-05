@@ -1,6 +1,10 @@
 import type { Handler, CloudFrontRequest } from "aws-lambda";
 
-export const handler: Handler<CloudFrontRequest> = async (event) => {
+export const handler: Handler<CloudFrontRequest> = async (
+  event,
+  context,
+  callback
+) => {
   const request = event;
   console.log(event, "my event");
   return request;
